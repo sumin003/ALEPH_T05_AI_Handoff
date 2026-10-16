@@ -79,34 +79,40 @@ const defaultText = () =>
   );
 
 // --- 히스토리 및 Undo/Redo 핵심 함수 ---
+// Record the state AFTER the edit. Existing callers usually invoke saveState
+// before changing state, so defer the snapshot until the current event finishes.
+let historyCaptureQueued = false;
+let pendingHistoryDescription = "편집 작업";
 function saveState(description = "편집 작업") {
   if (isRestoringState) return;
-  saveSelectedText();
-
-  const currentState = {
-    state: { ...state },
-    textItems: textItems.map(item => ({ ...item })),
-    selectedTextId,
-    description,
-    time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-  };
-
-  // 현재 인덱스 이후의 미래 기록(Redo 대상)이 있다면 잘라냄
-  if (historyIndex < historyStates.length - 1) {
-    historyStates = historyStates.slice(0, historyIndex + 1);
-  }
-
-  historyStates.push(JSON.stringify(currentState));
-  
-  // 최대 단계 제한 (MAX_HISTORY = 20)
-  if (historyStates.length > MAX_HISTORY) {
-    historyStates.shift();
-  } else {
-    historyIndex++;
-  }
-
-  updateUndoRedoButtons();
-  renderHistoryList();
+  pendingHistoryDescription = description;
+  if (historyCaptureQueued) return;
+  historyCaptureQueued = true;
+  queueMicrotask(() => {
+    historyCaptureQueued = false;
+    if (isRestoringState) return;
+    saveSelectedText();
+    const currentState = {
+      state: { ...state },
+      textItems: textItems.map(item => ({ ...item })),
+      selectedTextId,
+      description: pendingHistoryDescription,
+      time: new Date().toLocaleTimeString("ko-KR", {hour:"2-digit",minute:"2-digit",second:"2-digit"})
+    };
+    const previous = historyStates[historyIndex]
+      ? JSON.parse(historyStates[historyIndex]) : null;
+    // Avoid duplicate snapshots from focus, clicks, or unchanged controls.
+    const signature = data => JSON.stringify({state:data.state, textItems:data.textItems});
+    if (previous && signature(previous) === signature(currentState)) return;
+    if (historyIndex < historyStates.length - 1) {
+      historyStates = historyStates.slice(0, historyIndex + 1);
+    }
+    historyStates.push(JSON.stringify(currentState));
+    if (historyStates.length > MAX_HISTORY) historyStates.shift();
+    historyIndex = historyStates.length - 1;
+    updateUndoRedoButtons();
+    renderHistoryList();
+  });
 }
 
 function undo() {
@@ -144,7 +150,8 @@ function applyFullState(savedData) {
   state = { ...savedData.state };
   textItems = savedData.textItems.map(item => ({ ...item }));
   selectedTextId = savedData.selectedTextId;
-  
+  nextTextId = Math.max(nextTextId, ...textItems.map(item => item.id + 1));
+
   update(true);
   isRestoringState = false;
 }
@@ -349,6 +356,7 @@ function renderTextItems() {
 
         $("textInput").value = state.text;
         update();
+        saveState("추가 문구 수정");
       });
     }
   }
@@ -469,6 +477,7 @@ $("canvas").addEventListener("pointermove", event => {
 });
 
 function endTextPointer() {
+  if (activePointer) saveState("문구 위치 이동");
   activePointer = null;
 }
 
@@ -617,6 +626,7 @@ function bindNumber(
     );
 
     update(source !== "number");
+    saveState(actionName);
   }
 
   slider.addEventListener("input", () => {
@@ -891,6 +901,7 @@ $("textInput").oninput = event => {
   ).slice(0, 120).join("");
 
   update();
+  saveState("문구 내용 수정");
 };
 
 $("overlayText").onfocus = () => saveState("문구 수정 시작");
@@ -908,6 +919,7 @@ $("overlayText").oninput = event => {
   $("textInput").value = state.text;
 
   update();
+  saveState("미리보기 문구 수정");
 };
 
 $("fontFamily").onchange = event => {
@@ -985,8 +997,7 @@ async function makePNG() {
   }
 
   const preview = $("canvas");
-  const previewRect =
-    preview.getBoundingClientRect();
+  const previewRect =    preview.getBoundingClientRect();
 
   if (
     !previewRect.width ||
