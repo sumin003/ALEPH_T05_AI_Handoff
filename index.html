@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>짤·카드 스튜디오</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="hero">
+    <span>CREATE YOUR CARD</span>
+
+    <h1>짤·카드 스튜디오</h1>
+
+    <p>
+      이미지를 불러오고 문구의 위치·크기·색상을 바꿔보세요.
+    </p>
+  </header>
+
+  <main class="layout">
+
+    <section class="panel editor">
+
+      <h2>01 편집 도구</h2>
+
+      <div class="setting">
+        <h3>이미지 불러오기</h3>
+
+        <div class="image-upload-actions">
+          <input
+            type="file"
+            id="imageInput"
+            accept="image/png,image/jpeg"
+          >
+  
+          <button
+            type="button"
+            id="removeImage"
+            class="sub"
+          >
+            이미지 제거
+          </button>
+
+        </div>
+
+        <p class="help">
+          PNG와 JPEG 파일만 사용할 수 있습니다.
+        </p>
+      </div>
+
+      <div class="setting">
+        <h3>비율</h3>
+
+        <div class="ratio-row">
+
+          <button
+            type="button"
+            class="ratio-btn active"
+            data-ratio="1:1"
+          >
+            1:1
+            <small>정사각형</small>
+          </button>
+
+          <button
+            type="button"
+            class="ratio-btn"
+            data-ratio="4:5"
+          >
+            4:5
+            <small>세로형</small>
+          </button>
+
+          <button
+            type="button"
+            class="ratio-btn"
+            data-ratio="9:16"
+          >
+            9:16
+            <small>스토리</small>
+          </button>
+
+        </div>
+      </div>
+
+      <div class="setting">
+        <h3>배경</h3>
+
+        <div class="ratio-row">
+
+          <label class="mode">
+            <input
+              type="radio"
+              name="backgroundMode"
+              value="transparent"
+              checked
+            >
+            투명
+          </label>
+
+          <label class="mode">
+            <input
+              type="radio"
+              name="backgroundMode"
+              value="solid"
+            >
+            단색
+          </label>
+
+          <label class="mode">
+            <input
+              type="radio"
+              name="backgroundMode"
+              value="gradient"
+            >
+            그라데이션
+          </label>
+
+        </div>
+
+        <div id="solidControls" hidden>
+
+          <h4>배경 색상</h4>
+
+          <div
+            class="palette"
+            id="backgroundColorPalette"
+          ></div>
+
+          <div class="field">
+            <label for="backgroundColorHex">
+              색상 코드
+            </label>
+
+            <input
+              type="text"
+              class="hex"
+              id="backgroundColorHex"
+              value="#FFFFFF"
+              maxlength="7"
+              spellcheck="false"
+            >
+          </div>
+
+        </div>
+
+        <div id="gradientControls" hidden>
+
+          <h4>시작 색상</h4>
+
+          <div
+            class="palette"
+            id="gradientStartPalette"
+          ></div>
+
+          <div class="field">
+            <label for="gradientStartHex">
+              시작 색상 코드
+            </label>
+
+            <input
+              type="text"
+              class="hex"
+              id="gradientStartHex"
+              value="#E8DCFF"
+              maxlength="7"
+              spellcheck="false"
+            >
+          </div>
+
+          <h4>끝 색상</h4>
+
+          <div
+            class="palette"
+            id="gradientEndPalette"
+          ></div>
+
+          <div class="field">
+            <label for="gradientEndHex">
+              끝 색상 코드
+            </label>
+
+            <input
+              type="text"
+              class="hex"
+              id="gradientEndHex"
+              value="#C7E8FF"
+              maxlength="7"
+              spellcheck="false"
+            >
+          </div>
+
+          <div class="field">
+            <label for="gradientAngleNumber">
+              그라데이션 방향
+            </label>
+
+            <input
+              type="number"
+              id="gradientAngleNumber"
+              min="0"
+              max="360"
+              step="1"
+              value="135"
+            >
+
+            <span>°</span>
+          </div>
+
+          <input
+            type="range"
+            id="gradientAngle"
+            min="0"
+            max="360"
+            value="135"
+            aria-label="그라데이션 방향"
+          >
+
+        </div>
+      </div>
+
+      <div class="setting">
+        <h3>문구</h3>
+
+        <textarea
+          id="textInput"
+          maxlength="120"
+          rows="3"
+        >여기에 입력하세요</textarea>
+
+        <p class="help">
+          <span id="textCount">9</span>/120자 ·
+          미리보기 문구를 직접 편집할 수도 있어요.
+        </p>
+
+        <div class="text-actions">
+          <button type="button" id="addTextButton">+ 글 추가</button>
+          <button type="button" id="deleteTextButton">선택한 글 삭제</button>
+        </div>
+        <p class="help">미리보기에서 글을 클릭하면 해당 글을 편집할 수 있어요.</p>
+
+        <h4>글꼴</h4>
+
+        <select id="fontFamily">
+          <option value="Gowun Dodum">고운돋움</option>
+          <option value="Jua">주아</option>
+          <option value="Dongle">동글</option>
+          <option value="Gaegu">개구</option>
+          <option value="Black Han Sans">검은고딕</option>
+        </select>
+
+        <div class="field">
+          <label for="fontSizeNumber">
+            글자 크기
+          </label>
+
+          <input
+            type="number"
+            id="fontSizeNumber"
+            min="10"
+            max="120"
+            step="1"
+            value="30"
+          >
+
+          <span>px</span>
+        </div>
+
+        <input
+          type="range"
+          id="fontSize"
+          min="10"
+          max="120"
+          value="30"
+          aria-label="글자 크기"
+        >
+
+        <div class="field">
+          <label for="textRotationNumber">
+            문구 기울기
+          </label>
+
+          <input
+            type="number"
+            id="textRotationNumber"
+            min="-180"
+            max="180"
+            step="1"
+            value="0"
+          >
+
+          <span>°</span>
+        </div>
+
+        <input
+          type="range"
+          id="textRotation"
+          min="-180"
+          max="180"
+          value="0"
+          aria-label="문구 기울기"
+        >
+
+        <h4>글자 색상</h4>
+
+        <div
+          class="palette"
+          id="textColorPalette"
+        ></div>
+
+        <div class="field">
+          <label for="textColorHex">
+            글자 색상 코드
+          </label>
+
+          <input
+            type="text"
+            class="hex"
+            id="textColorHex"
+            value="#000000"
+            maxlength="7"
+            spellcheck="false"
+          >
+        </div>
+
+        <h4>
+          <label>
+            <input
+              type="checkbox"
+              id="shadowToggle"
+            >
+            그림자 사용
+          </label>
+        </h4>
+
+        <div id="shadowOptions" hidden>
+
+          <select
+            id="shadowDirection"
+            aria-label="그림자 방향"
+          >
+            <option value="bottom-right">
+              오른쪽 아래
+            </option>
+
+            <option value="bottom-left">
+              왼쪽 아래
+            </option>
+
+            <option value="top-right">
+              오른쪽 위
+            </option>
+
+            <option value="top-left">
+              왼쪽 위
+            </option>
+          </select>
+
+          <div class="field">
+            <label for="shadowDistanceNumber">
+              그림자 거리
+            </label>
+
+            <input
+              type="number"
+              id="shadowDistanceNumber"
+              min="0"
+              max="30"
+              step="1"
+              value="3"
+            >
+
+            <span>px</span>
+          </div>
+
+          <input
+            type="range"
+            id="shadowDistance"
+            min="0"
+            max="30"
+            value="3"
+            aria-label="그림자 거리"
+          >
+
+        </div>
+      </div>
+
+      <!-- 실행 취소/다시 실행 버튼 -->
+      <div class="history-actions" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button type="button" id="undoButton" class="sub" style="flex:1; margin-top:0;" disabled>↩ 실행 취소</button>
+        <button type="button" id="redoButton" class="sub" style="flex:1; margin-top:0;" disabled>↪ 다시 실행</button>
+      </div>
+
+      <!-- 편집 히스토리 패널 추가 -->
+      <div class="setting history-panel-setting">
+        <h3>편집 히스토리 (최대 20단계)</h3>
+        <div id="historyList" class="history-list"></div>
+      </div>
+
+      <button
+        type="button"
+        id="resetButton"
+        class="reset"
+      >
+        설정 초기화
+      </button>
+
+    </section>
+
+    <section class="panel preview">
+
+      <div class="preview-head">
+
+        <div>
+          <h2>02 미리보기</h2>
+
+          <p>
+            이미지와 문구를 편집한 결과를 확인할 수 있습니다.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="saveButton"
+          class="save"
+        >
+          ↓ 저장하기
+        </button>
+
+      </div>
+
+      <div class="stage">
+
+        <div id="canvas" class="canvas">
+
+          <div id="backgroundLayer"></div>
+
+          <img
+            id="previewImage"
+            alt=""
+          >
+
+          <div id="textLayer">
+
+            <div
+              id="overlayText"
+              contenteditable="true"
+              spellcheck="false"
+            >여기에 입력하세요</div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="meta">
+        현재 비율
+        <strong id="currentRatio">1:1</strong>
+
+        · 문구
+        <strong id="currentText">
+          여기에 입력하세요
+        </strong>
+      </div>
+
+      <section
+        class="template-section"
+        aria-labelledby="templateTitle"
+      >
+
+        <div class="template-heading">
+          <h2 id="templateTitle">템플릿</h2>
+
+          <p>
+            마음에 드는 설정을 저장하고
+            다시 불러올 수 있어요.
+          </p>
+        </div>
+
+        <div class="template-create">
+
+          <input
+            type="text"
+            id="templateName"
+            placeholder="템플릿 이름을 입력하세요"
+            maxlength="40"
+            aria-label="템플릿 이름"
+          >
+
+          <button
+            type="button"
+            id="createTemplate"
+          >
+            템플릿 저장
+          </button>
+
+        </div>
+
+        <div id="templateList"></div>
+
+        <p class="help template-help">
+          템플릿은 브라우저에 저장됩니다.
+        </p>
+
+      </section>
+
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
