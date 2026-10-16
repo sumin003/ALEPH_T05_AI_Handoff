@@ -105,15 +105,15 @@
 
 | 파일           | 주요 작업                                   |
 | ------------ | --------------------------------------- |
-| \`index.html\` | Undo/Redo 버튼 및 편집 히스토리 패널 추가            |
-| \`style.css\`  | 편집 히스토리 관련 화면 스타일                       |
-| \`script.js\`  | 편집 상태 기록, Undo/Redo, 상태 복원 및 히스토리 목록 관리 |
+| `index.html` | Undo/Redo 버튼 및 편집 히스토리 패널 추가            |
+| `style.css`  | 편집 히스토리 관련 화면 스타일                       |
+| `script.js`  | 편집 상태 기록, Undo/Redo, 상태 복원 및 히스토리 목록 관리 |
 
-첨부된 \`script.js\`에는 \`saveState()\`, \`undo()\`, \`redo()\`, \`jumpToHistory()\`, \`applyFullState()\` 등의 함수가 포함되어 있습니다.
+첨부된 `script.js`에는 `saveState()`, `undo()`, `redo()`, `jumpToHistory()`, `applyFullState()` 등의 함수가 포함되어 있습니다.
 
-키보드 단축키 \`Ctrl+Z\`, \`Ctrl+Y\`, \`Ctrl+Shift+Z\`도 연결되어 있습니다.
+키보드 단축키 `Ctrl+Z`, `Ctrl+Y`, `Ctrl+Shift+Z`도 연결되어 있습니다.
 
-또한 첨부 코드에서는 \`MAX_HISTORY = 20\`으로 설정되어 있고, 과거 기록에서 새 편집을 수행하면 이후 기록을 제거하는 처리도 포함되어 있습니다.
+또한 첨부 코드에서는 `MAX_HISTORY = 20`으로 설정되어 있고, 과거 기록에서 새 편집을 수행하면 이후 기록을 제거하는 처리도 포함되어 있습니다.
 
 이는 인수인계 문서에 기록된 일부 미구현 상태와 차이가 있으므로, 최종 동작 여부는 별도 실행 검증이 필요합니다.
 
@@ -138,7 +138,7 @@ Gemini 작업 기록 파일에 기재된 내용은 다음과 같습니다.
 
 ### 5.4 모델 A 검사 보고서
 
-Gemini가 제공한 \`T05_GEMINI_TEST_REPORT.txt\`에는 다음과 같은 검사가 기록되어 있습니다.
+Gemini가 제공한 `T05_GEMINI_TEST_REPORT.txt`에는 다음과 같은 검사가 기록되어 있습니다.
 
 | 검사 ID   | 검사 항목                    | 보고된 결과 |
 | ------- | ------------------------ | ------ |
@@ -165,7 +165,7 @@ Gemini의 검사 보고서와 작업 기록 사이에 결과 표기 차이가 �
 
 본 README에서는 원본 보고서에 기재된 결과를 그대로 구분해 기록합니다.
 
-또한 Gemini가 사용한 \`TEST-01 ~ TEST-10\`은 과제에서 정한 공통 검사 \`T05-S01 ~ T05-S10\`과 항목 및 기준이 완전히 일치하지 않습니다.
+또한 Gemini가 사용한 `TEST-01 ~ TEST-10`은 과제에서 정한 공통 검사 `T05-S01 ~ T05-S10`과 항목 및 기준이 완전히 일치하지 않습니다.
 
 따라서 Gemini가 기록한 PASS 9건을 공통 고정 검사 10개의 PASS 9건으로 간주하지 않습니다.
 
@@ -177,12 +177,12 @@ Gemini의 검사 보고서와 작업 기록 사이에 결과 표기 차이가 �
 
 제공된 작업 결과물은 다음과 같습니다.
 
-- \`index.html\`
-- \`style.css\`
-- \`script.js\`
-- \`T05_GEMINI_TEST_REPORT.txt\`
-- \`T05_GEMINI_WORK_LOG.txt\`
-- \`T05_HANDOFF.md\`
+- `index.html`
+- `style.css`
+- `script.js`
+- `T05_GEMINI_TEST_REPORT.txt`
+- `T05_GEMINI_WORK_LOG.txt`
+- `T05_HANDOFF.md`
 
 GitHub 업로드는 Gemini가 직접 수행하지 않았으며, 별도의 저장소에 작업 결과물을 기록할 예정입니다.
 
@@ -202,11 +202,11 @@ Gemini 인수인계 문서에는 Undo/Redo, 편집 기록 자동 생성, 기록 
 
 ### 6.3 실행 방법
 
-별도의 빌드 과정 없이 \`index.html\`, \`style.css\`, \`script.js\`를 같은 폴더에 두고 정적 웹 서버 또는 브라우저에서 실행합니다.
+별도의 빌드 과정 없이 `index.html`, `style.css`, `script.js`를 같은 폴더에 두고 정적 웹 서버 또는 브라우저에서 실행합니다.
 
 ### 6.4 통과 검사
 
-Gemini 인수인계 문서에는 TEST-01 \~ TEST-08, TEST-10의 PASS와 TEST-09의 미검사가 기록되어 있습니다.
+Gemini 인수인계 문서에는 TEST-01 ~ TEST-08, TEST-10의 PASS와 TEST-09의 미검사가 기록되어 있습니다.
 
 ### 6.5 남은 문제
 
@@ -269,7 +269,7 @@ Gemini 인수인계 문서에는 다음 문제가 기재되어 있습니다.
 ---
 
 ## 9. 프로젝트 파일 구성
-\`\`\`
+```
 ALEPH_T05_AI_Handoff/
 ├── index.html
 ├── style.css
@@ -278,7 +278,7 @@ ALEPH_T05_AI_Handoff/
 ├── T05_HANDOFF.md
 ├── T05_GEMINI_TEST_REPORT.txt
 └── T05_GEMINI_WORK_LOG.txt
-\`\`\`
+```
 
 ---
 
